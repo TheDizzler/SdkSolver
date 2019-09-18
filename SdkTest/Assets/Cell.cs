@@ -8,8 +8,14 @@ public class Cell : MonoBehaviour
 	public HashSet<int> possibles;
 	public int cellBlockID;
 
+	public RowData rowData;
+	public ColData colData;
+	public BlockData blockData;
+
+
 	private Text text;
 
+	
 	public void Start()
 	{
 		text = GetComponentInChildren<Text>();
