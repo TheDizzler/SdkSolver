@@ -5,17 +5,17 @@ using UnityEngine.UI;
 public class Cell : MonoBehaviour
 {
 	public int known = 0;
-	public HashSet<int> possibles;
+
 	public int cellBlockID;
 
 	public RowData rowData;
 	public ColData colData;
 	public BlockData blockData;
 
-
+	private HashSet<int> possibles;
 	private Text text;
 
-	
+
 	public void Start()
 	{
 		text = GetComponentInChildren<Text>();
@@ -31,7 +31,11 @@ public class Cell : MonoBehaviour
 		}
 	}
 
-	public IEnumerable<int> GetPossibles()
+	/// <summary>
+	/// creates copy
+	/// </summary>
+	/// <returns></returns>
+	public HashSet<int> GetPossibles()
 	{
 		if (known != 0)
 		{
@@ -41,12 +45,23 @@ public class Cell : MonoBehaviour
 		{
 			if (possibles == null)
 				return new HashSet<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-			return possibles;
+			HashSet<int> copy = new HashSet<int>();
+			foreach (int value in possibles)
+				copy.Add(value);
+			return copy;
 		}
 	}
 
+	public void SetKnown(int newKnown)
+	{
+		known = newKnown;
+		possibles = new HashSet<int> { known };
+		text.color = Color.green;
+		text.text = known.ToString();
+	}
+
 	/// <summary>
-	/// 
+	/// true if cell became known
 	/// </summary>
 	/// <param name="possibilites">true if cell became known</param>
 	/// <returns></returns>
@@ -57,18 +72,76 @@ public class Cell : MonoBehaviour
 		{
 			foreach (int value in possibles)
 				known = value;
+			text.color = Color.black;
 			text.text = known.ToString();
+			return true;
+		}
+		else if (known == 0 && possibles.Count < 6)
+		{
+			if (possibles.Count == 0)
+			{
+				Debug.LogError("BLAARGH " + cellBlockID);
+				text.color = Color.yellow;
+				text.text = "!";
+			}
+			string newtext = "";
+			foreach (int value in possibles)
+				newtext += value + ",";
+			newtext = newtext.Substring(0, newtext.Length - 1);
+			text.color = Color.red;
+			text.text = newtext;
+		}
+
+
+		return false;
+	}
+
+	/// <summary>
+	/// Returns true when a change made
+	/// </summary>
+	/// <param name="remove"></param>
+	/// <returns></returns>
+	public bool Remove(HashSet<int> remove)
+	{
+		int precount = possibles.Count;
+		possibles.ExceptWith(remove);
+
+		if (possibles.Count == 1)
+		{
+			foreach (int value in possibles)
+				known = value;
+			text.color = Color.black;
+			text.text = known.ToString();
+			return true;
+		}
+
+		if (precount != possibles.Count)
+		{
+			if (possibles.Count == 0)
+			{
+				Debug.LogError("BLAARGH " + cellBlockID);
+				text.color = Color.yellow;
+				text.text = "!";
+			}
+			//string newtext = "";
+			//foreach (int value in possibles)
+			//	newtext += value + ",";
+			//newtext = newtext.Substring(0, newtext.Length - 1);
+			//text.color = Color.cyan;
+			//text.text = newtext;
 			return true;
 		}
 
 		return false;
 	}
 
+
 	public void OnDrawGizmos()
 	{
 		if (known != 0)
 			GetComponentInChildren<Text>().text = known.ToString();
-		else
+		else if (possibles == null)
 			GetComponentInChildren<Text>().text = "-";
 	}
+
 }
