@@ -225,22 +225,35 @@ public class Grid : MonoBehaviour
 		}
 	}
 
-	/// <summary>
-	/// NOPE. Bad logic!
-	/// </summary>
-	public void FindHarderDoubles()
-	{
-		bool changesMade = false;
-		for (int i = 0; i < 9; ++i)
-		{
-			if (rows[i].FindHarderDoubles())
-				changesMade = true;
-		}
 
-		if (changesMade)
+	public void FindTripletsInBlock()
+	{
+		bool changesMade = true;
+		while (changesMade)
 		{
-			FirstPass();
 			changesMade = false;
+			for (int i = 0; i < 9; ++i)
+			{
+				if (blocks[i].FindTripletRowInBlock())
+					changesMade = true;
+			}
+
+			if (changesMade)
+			{
+				FirstPass();
+				continue;
+			}
+
+			for (int i = 0; i < 9; ++i)
+			{
+				if (blocks[i].FindTripletColInBlock())
+					changesMade = true;
+			}
+
+			if (changesMade)
+			{
+				FirstPass();
+			}
 		}
 	}
 

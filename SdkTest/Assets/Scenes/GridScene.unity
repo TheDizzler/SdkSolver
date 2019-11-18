@@ -1941,7 +1941,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Unique Harder Doubles
+  m_Text: Find Triplet block
 --- !u!222 &1333812356
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3281,7 +3281,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 998366426}
-        m_MethodName: FindHarderDoubles
+        m_MethodName: FindTripletsInBlock
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class Cell : MonoBehaviour
 {
 	public int known = 0;
-
 	public int cellBlockID;
 
 	public RowData rowData;
@@ -72,7 +71,7 @@ public class Cell : MonoBehaviour
 		{
 			foreach (int value in possibles)
 				known = value;
-			text.color = Color.black;
+			text.color = Color.gray;
 			text.text = known.ToString();
 			return true;
 		}
@@ -84,14 +83,10 @@ public class Cell : MonoBehaviour
 				text.color = Color.yellow;
 				text.text = "!";
 			}
-			string newtext = "";
-			foreach (int value in possibles)
-				newtext += value + ",";
-			newtext = newtext.Substring(0, newtext.Length - 1);
-			text.color = Color.red;
-			text.text = newtext;
-		}
 
+			text.color = Color.red;
+			text.text = ICellGroupData.GetValues(possibles);
+		}
 
 		return false;
 	}
@@ -106,11 +101,11 @@ public class Cell : MonoBehaviour
 		int precount = possibles.Count;
 		possibles.ExceptWith(remove);
 
-		if (possibles.Count == 1)
+		if (possibles.Count == 1 && precount != 1)
 		{
 			foreach (int value in possibles)
 				known = value;
-			text.color = Color.black;
+			text.color = Color.cyan;
 			text.text = known.ToString();
 			return true;
 		}
@@ -119,16 +114,11 @@ public class Cell : MonoBehaviour
 		{
 			if (possibles.Count == 0)
 			{
-				Debug.LogError("BLAARGH " + cellBlockID);
+				Debug.LogError("Major ufkcup in cell block " + cellBlockID);
 				text.color = Color.yellow;
 				text.text = "!";
 			}
-			//string newtext = "";
-			//foreach (int value in possibles)
-			//	newtext += value + ",";
-			//newtext = newtext.Substring(0, newtext.Length - 1);
-			//text.color = Color.cyan;
-			//text.text = newtext;
+
 			return true;
 		}
 
@@ -143,5 +133,4 @@ public class Cell : MonoBehaviour
 		else if (possibles == null)
 			GetComponentInChildren<Text>().text = "-";
 	}
-
 }

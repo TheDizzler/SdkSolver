@@ -80,9 +80,7 @@ public abstract class ICellGroupData
 				possibles.IntersectWith(otherCell.GetPossibles());
 				if (possibles.Count == 2)
 				{
-					string values = "";
-					foreach (int value in possibles)
-						values += value.ToString() + ",";
+					string values = GetValues(possibles);
 					//Debug.Log("may have match with " + values + " in cell " + cell.cellBlockID);
 					foreach (Cell anotherCell in cells)
 					{
@@ -90,7 +88,7 @@ public abstract class ICellGroupData
 							continue;
 						if (anotherCell.Remove(possibles))
 						{
-							Debug.Log(values + " removed!");
+							//Debug.Log(values + " removed!");
 							changesMade = true;
 						}
 					}
@@ -101,6 +99,9 @@ public abstract class ICellGroupData
 		return changesMade;
 	}
 
+	/// <summary>
+	/// NOPE. Bad logic!
+	/// </summary>
 	public bool FindHarderDoubles()
 	{
 		bool changesMade = false;
@@ -121,9 +122,7 @@ public abstract class ICellGroupData
 
 				if (possibles.IsSubsetOf(otherCell.GetPossibles()))
 				{
-					values = "";
-					foreach (int value in possibles)
-						values += value.ToString() + ",";
+					values = GetValues(possibles);
 					Debug.Log("Found a subset with " + values + " in cell " + cell.cellBlockID);
 					if (foundOneSubset)
 					{
@@ -158,21 +157,12 @@ public abstract class ICellGroupData
 	}
 
 
-	//private bool CheckForUniqueSet(Cell cell, Cell otherCell, HashSet<int> possibles)
-	//{
-	//	foreach (Cell anotherCell in cells)
-	//	{
-	//		if (anotherCell.known != 0 || cell == anotherCell || otherCell == anotherCell)
-	//			continue;
 
-	//		possibles.IntersectWith(anotherCell.GetPossibles());
-	//		if (possibles.Count == 2)
-	//		{
-	//			Debug.Log(" we was wrong :(");
-	//			return false;
-	//		}
-	//	}
-
-	//	return true;
-	//}
+	public static string GetValues(HashSet<int> checkTriplet)
+	{
+		string values = "";
+		foreach (int value in checkTriplet)
+			values += value + ",";
+		return values.Substring(0, values.Length - 1);
+	}
 }
